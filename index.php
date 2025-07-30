@@ -14,10 +14,9 @@ var_dump(curl_error($ch));
 return json_decode($res);
 }}
 $update = json_decode(file_get_contents('php://input'), true);
-$message = $update['message']['text'] ?? '';
+$text = $update['message']['text'] ?? '';
 $chat_id = $update['message']['chat']['id'] ?? '';
-$text = $message->text;
-$data = $update->callback_query->data;
+$data = $update['callback_query']['data'] ?? '';
 if($text == "فحص"){
 	$keyboard = getMonthsPageKeyboard($page);
 bot('sendMessage',[
@@ -25,7 +24,7 @@ bot('sendMessage',[
 'text'=>"جاري فحص القنوات إنتظر قليلا ..♻",
 'reply_markup'=>json_encode(['inline_keyboard' => $keyboard])
 ]);}
-if ($message == '/start') {
+if ($text == '/start') {
     sendMessage($chat_id, "أهلاً بك في بوت PHP على Railway!");
 }
 
