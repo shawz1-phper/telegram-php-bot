@@ -1,6 +1,6 @@
 <?php
 $token = '8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678';
-define("API_KEY",$token);
+/*define("API_KEY",$token);
 function bot($method,$datas=[]){
 $url = "https://api.telegram.org/bot".API_KEY."/".$method;
 $ch = curl_init();
@@ -12,18 +12,18 @@ if(curl_error($ch)){
 var_dump(curl_error($ch));
 }else{
 return json_decode($res);
-}}
+}}*/
 $update = json_decode(file_get_contents('php://input'), true);
 $text = $update['message']['text'] ?? '';
 $chat_id = $update['message']['chat']['id'] ?? '';
 $data = $update['callback_query']['data'] ?? '';
-if($text == "فحص"){
+/*if($text == "فحص"){
 	$keyboard = getMonthsPageKeyboard(1);
 bot('sendMessage',[
 'chat_id'=>$chat_id,
 'text'=>"جاري فحص القنوات إنتظر قليلا ..♻",
 'reply_markup'=>json_encode(['inline_keyboard' => $keyboard])
-]);}
+]);}*/
 if ($text == '/start') {
     sendMessage($chat_id, "أهلاً بك في بوت PHP على Railway!");
 }
