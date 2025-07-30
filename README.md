@@ -1,8 +1,48 @@
-FROM php:8.1-cli
+# Telegram PHP Bot using Webhook (Render Deployment)
 
-RUN apt-get update && apt-get install -y curl unzip
+🤖 A simple Telegram bot built with PHP using the Telegram Bot API and deployed on [Render](https://render.com).
 
-COPY . /app
-WORKDIR /app
+---
 
-CMD ["php", "-S", "0.0.0.0:80", "index.php"]
+## 🚀 Features
+
+- Webhook-based Telegram bot
+- Lightweight PHP implementation (no frameworks)
+- Auto-deployment via Render + GitHub
+- Simple `/start` command support
+
+---
+
+## 🧰 Requirements
+
+- PHP 8.1 or higher
+- Telegram Bot Token (from @BotFather)
+- GitHub account
+- Render account
+
+---
+
+## ⚙️ Environment Variables
+
+| Variable             | Description                      |
+|----------------------|----------------------------------|
+| `TELEGRAM_BOT_TOKEN` | Your Telegram bot token          |
+
+You can set this in the Render dashboard under **Environment → Add Environment Variable**.
+
+---
+
+## 📦 Deployment (on Render)
+
+1. Fork or clone this repo
+2. Connect your GitHub to [Render](https://render.com)
+3. Create a **new Web Service** on Render
+4. Use Docker environment
+5. Add your `TELEGRAM_BOT_TOKEN` under environment variables
+6. Wait for Render to build and deploy
+
+---
+
+## 🔗 Set the Webhook
+
+After the app is deployed, set the Telegram webhook using the following:
