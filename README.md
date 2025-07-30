@@ -1,7 +1,8 @@
-# Telegram PHP Bot on Railway
+FROM php:8.1-cli
 
-This is a simple Telegram bot built with PHP and deployable on Railway using Docker.
+RUN apt-get update && apt-get install -y curl unzip
 
-## Files:
-- `index.php`: Main bot logic (handles Telegram updates and responses)
-- `Dockerfile`: Prepares a PHP server using Docker for deployment
+COPY . /app
+WORKDIR /app
+
+CMD ["php", "-S", "0.0.0.0:80", "index.php"]
