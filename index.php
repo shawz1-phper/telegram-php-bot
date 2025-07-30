@@ -18,7 +18,7 @@ $text = $update['message']['text'] ?? '';
 $chat_id = $update['message']['chat']['id'] ?? '';
 $data = $update['callback_query']['data'] ?? '';
 if($text == "فحص"){
-	$keyboard = getMonthsPageKeyboard($page);
+	$keyboard = getMonthsPageKeyboard(1);
 bot('sendMessage',[
 'chat_id'=>$chat_id,
 'text'=>"جاري فحص القنوات إنتظر قليلا ..♻",
