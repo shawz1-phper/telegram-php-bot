@@ -13,3 +13,4 @@ function sendMessage($chat_id, $text) {
     $data = ['chat_id' => $chat_id, 'text' => $text];
     file_get_contents($url . '?' . http_build_query($data));
 }
+?>
