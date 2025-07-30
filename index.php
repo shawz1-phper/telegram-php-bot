@@ -208,4 +208,3 @@ if (strpos($data, 'daypage_') === 0) {
         'reply_markup' => $replyMarkup
     ]));
 }*/
-?>
