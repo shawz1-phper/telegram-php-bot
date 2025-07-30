@@ -22,16 +22,6 @@
 
 ---
 
-## ⚙️ Environment Variables
-
-| Variable             | Description                      |
-|----------------------|----------------------------------|
-| `TELEGRAM_BOT_TOKEN` | Your Telegram bot token          |
-
-You can set this in the Render dashboard under **Environment → Add Environment Variable**.
-
----
-
 ## 📦 Deployment (on Render)
 
 1. Fork or clone this repo
