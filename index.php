@@ -16,6 +16,8 @@ return json_decode($res);
 $update = json_decode(file_get_contents('php://input'), true);
 $message = $update['message']['text'] ?? '';
 $chat_id = $update['message']['chat']['id'] ?? '';
+$text = $message->text;
+$data = $update->callback_query->data;
 if($text == "فحص"){
 	$keyboard = getMonthsPageKeyboard($page);
 bot('sendMessage',[
