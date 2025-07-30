@@ -1,15 +1,12 @@
 <?php
-$token = '8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678';
-$update = json_decode(file_get_contents('php://input'), true);
-$message = $update['message']['text'] ?? '';
-$chat_id = $update['message']['chat']['id'] ?? '';
-if ($message == '/start') {
-    sendMessage($chat_id, "أهلاً بك في بوت PHP على Railway!");
-}
+$botToken = "8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678");
+$content = file_get_contents("php://input");
+$update = json_decode($content, true);
 
-function sendMessage($chat_id, $text) {
-    $url = "https://api.telegram.org/bot$token/sendMessage";
-    $data = ['chat_id' => $chat_id, 'text' => $text];
-    file_get_contents($url . '?' . http_build_query($data));
+$chatId = $update["message"]["chat"]["id"] ?? null;
+$text = $update["message"]["text"] ?? "";
+
+if ($text == "/start") {
+    $msg = "مرحبًا! تم تشغيل البوت بنجاح 🎉";
+    file_get_contents("https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatId&text=" . urlencode($msg));
 }
-?>
