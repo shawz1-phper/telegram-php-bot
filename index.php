@@ -8,7 +8,7 @@ if ($message == '/start') {
 }
 
 function sendMessage($chat_id, $text) {
-    $token = getenv('TELEGRAM_BOT_TOKEN');
+    $token = '8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678';
     $url = "https://api.telegram.org/bot$token/sendMessage";
     $data = ['chat_id' => $chat_id, 'text' => $text];
     file_get_contents($url . '?' . http_build_query($data));
