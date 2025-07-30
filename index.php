@@ -33,6 +33,7 @@ function sendMessage($chat_id, $text) {
     $data = ['chat_id' => $chat_id, 'text' => $text];
     file_get_contents($url . '?' . http_build_query($data));
 }
+/*
 function getMonthsPageKeyboard($page) {
     $months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
     if ($page < 1) $page = 1;
@@ -206,5 +207,5 @@ if (strpos($data, 'daypage_') === 0) {
         'message_id' => $message_id,
         'reply_markup' => $replyMarkup
     ]));
-}
+}*/
 ?>
