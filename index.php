@@ -1,9 +1,9 @@
 <?php
-$botToken = "8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678";
+$botToken = '8416879937:AAGaScKAEj5OIQxDy_Yfgi1TOngHpWVq678';
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
 
-$chatId = $update["message"]["chat"]["id"] ?? null;
+$chatId = $update["message"]["chat"]["id"] ?? "";
 $text = $update["message"]["text"] ?? "";
 
 if ($text == "/start") {
