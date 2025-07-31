@@ -51,29 +51,51 @@ function sendMessage($chat_id, $text) {
 
 function getMonthsPageKeyboard($page) {
     $months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+    $monthsPerPage = 6;
+    $totalPages = ceil(count($months) / $monthsPerPage);
+
     if ($page < 1) $page = 1;
-    if ($page > 2) $page = 2;
+    if ($page > $totalPages) $page = $totalPages;
+
+    $startIndex = ($page - 1) * $monthsPerPage;
+    $monthsOnPage = array_slice($months, $startIndex, $monthsPerPage);
+
     $keyboard = [];
 
-    if($page == '1'){
-$j = 1;
-$jj = 6;}
-if($page == '2'){
-$j = 7;
-$jj = 12;}
-    $monthRow = [];
-    for ($i = $j; $i < $jj; $i++) {
-        $month = $months[$i];
-        $monthRow[] = [
-            'text' => $month,
-            'callback_data' => 'month_' . strtolower($month)
+    // الصف الأول (3 أشهر)
+    $row1 = [];
+    for ($i = 0; $i < 3 && isset($monthsOnPage[$i]); $i++) {
+        $row1[] = [
+            'text' => $monthsOnPage[$i],
+            'callback_data' => 'month_' . strtolower($monthsOnPage[$i])
         ];
     }
-    $keyboard[] = $monthRow;
-    $keyboard[] = [
-        ['text' => '⏮️ السابق', 'callback_data' => 'page_' . ($page - 1)],
-        ['text' => '⏭️ التالي', 'callback_data' => 'page_' . ($page + 1)]
-    ];
+    if (!empty($row1)) $keyboard[] = $row1;
+
+    // الصف الثاني (3 أشهر التالية)
+    $row2 = [];
+    for ($i = 3; $i < 6 && isset($monthsOnPage[$i]); $i++) {
+        $row2[] = [
+            'text' => $monthsOnPage[$i],
+            'callback_data' => 'month_' . strtolower($monthsOnPage[$i])
+        ];
+    }
+    if (!empty($row2)) $keyboard[] = $row2;
+
+    // أزرار التنقل بين الصفحات
+    $navRow = [];
+
+    if ($page > 1) {
+        $navRow[] = ['text' => '⏮️ السابق', 'callback_data' => 'page_' . ($page - 1)];
+    }
+
+    if ($page < $totalPages) {
+        $navRow[] = ['text' => '⏭️ التالي', 'callback_data' => 'page_' . ($page + 1)];
+    }
+
+    if (!empty($navRow)) $keyboard[] = $navRow;
+
     return $keyboard;
 }
 
