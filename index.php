@@ -110,7 +110,7 @@ function getDaysPageKeyboard($month, $page) {
     $perPage = 10;
     $totalPages = ceil($daysInMonth / $perPage);
 if ($page < 1) $page = 1;
-    if ($page >= $totalPages) $page = '1';
+    if ($page > $totalPages) $page = '1';
     $start = ($page - 1) * $perPage + 1;
     $end = min($start + $perPage - 1, $daysInMonth);
     $days = range($start, $end);
