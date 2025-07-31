@@ -181,7 +181,7 @@ if (strpos($data, 'day_') === 0) {
     $day = $parts[2];
     
     // ✅ حفظ اليوم المختار في ملف حسب user_id
-    file_put_contents("storage/$user_id.txt", "$day-$month");
+    file_put_contents("storage/".$user_id.".txt", "$month:$day\n", FILE_APPEND);
 
     // ✅ تعديل نفس الرسالة بنجاح
     bot('editMessageText', [
