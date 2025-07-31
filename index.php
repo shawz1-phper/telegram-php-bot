@@ -55,9 +55,12 @@ function getMonthsPageKeyboard($page) {
     if ($page > 2) $page = 2;
     $keyboard = [];
 
-    $j = ($page == 1) ? 0 : 6;
-    $jj = ($page == 1) ? 6 : 12;
-
+    if($page == '1'){
+$j = 1;
+$jj = 6;}
+if($page == '2'){
+$j = 7;
+$jj = 12;}
     $monthRow = [];
     for ($i = $j; $i < $jj; $i++) {
         $month = $months[$i];
@@ -106,7 +109,8 @@ function getDaysPageKeyboard($month, $page) {
     $daysInMonth = getDaysInMonth($month);
     $perPage = 10;
     $totalPages = ceil($daysInMonth / $perPage);
-
+if ($page < 1) $page = 1;
+    if ($page > $totalPages) $page = $totalPages;
     $start = ($page - 1) * $perPage + 1;
     $end = min($start + $perPage - 1, $daysInMonth);
     $days = range($start, $end);
