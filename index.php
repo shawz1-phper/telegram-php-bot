@@ -98,7 +98,7 @@ function getMonthsPageKeyboard($page) {
 
     if (!empty($navRow)) $keyboard[] = $navRow;
 
-    return $keyboard;
+    return ($keyboard);
 }
 
 if (strpos($data, 'page_') === 0) {
