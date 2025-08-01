@@ -49,7 +49,7 @@ if ($text == "/info") {
 
 if ($text == '/start') {
 	$d = '0123456';
-	$dd = mb_srtlen($d);
+	$dd = srtlen($d);
     bot('sendMessage', [
         'chat_id' => $chat_id,
         'text' => "اهلا بك.......👋 $dd",
