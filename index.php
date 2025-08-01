@@ -63,7 +63,7 @@ if (strpos($data, 'month_') === 0) {
 
     editMessage($token, $chat_id, $message_id, "📅 اختر اليوم من $month:", $keyboard);
 }
-elseif (strpos($data, 'day_') === 0) {
+}elseif (strpos($data, 'day_') === 0) {
     list(, $month, $day) = explode('_', $data);
 
     // حفظ اليوم للمستخدم
