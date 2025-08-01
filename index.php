@@ -35,10 +35,11 @@ if ($text == "فحص") {
     $key1 = [];
     $key1[] = ['text' => '⏮️', 'callback_data' => "cc"];
     $keyboard = array_merge($key2,$key1);
+    $ke = json_encode(['inline_keyboard' => $keyboard]);
     bot('sendMessage', [
         'chat_id' => $chat_id,
         'text' => "جاري فحص القنوات إنتظر قليلاً ..♻",
-        'reply_markup' => json_encode(['inline_keyboard' => $keyboard])
+        'reply_markup' =>$ke
     ]);
 }
 
