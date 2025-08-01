@@ -32,7 +32,7 @@ $user_id = $update['callback_query']['from']['id'] ?? '';
 if ($text == "فحص") {
     $page = 1;
     $key2 = getMonthsPageKeyboard($page);
-    $key1[];
+    $key1 = [];
     $key1[] = "['text' => '⏮️', 'callback_data' => "cc"]";
     $keyboard = array_merge($key2,$key1);
     bot('sendMessage', [
