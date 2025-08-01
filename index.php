@@ -48,11 +48,11 @@ if ($text == "/info") {
 }
 
 if ($text == '/start') {
-	$d = ("0123456");
-	$dd = mb_srtlen($d);
+	$d = '0123456';
+	$dd = mb_strlen($d);
     bot('sendMessage', [
         'chat_id' => $chat_id,
-        'text' =>$dd,
+        'text' =>" اهلا بك......👋 $dd",
     ]);
 }
 function getMonthsPageKeyboard($page) {
