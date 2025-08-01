@@ -1,85 +1,115 @@
 <?php
-require_once 'functions.php';
 $token = getenv("TELEGRAM_BOT_TOKEN");
 define("API_KEY", $token);
+
+function bot($method, $datas = []) {
+    $url = "https://api.telegram.org/bot" . API_KEY . "/" . $method;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+    $res = curl_exec($ch);
+    if (curl_error($ch)) {
+        var_dump(curl_error($ch));
+    } else {
+        return json_decode($res);
+    }
+}
 $update = json_decode(file_get_contents('php://input'), true);
+$text = $update['message']['text'] ?? '';
+$chat_id = $update['message']['chat']['id'] ?? '';
+$data = $update['callback_query']['data'] ?? '';
+$callback_id = $update['callback_query']['id'] ?? '';
+$callback_chat_id = $update['callback_query']['message']['chat']['id'] ?? '';
+$message_id = $update['callback_query']['message']['message_id'] ?? '';
+$user_id = $update['callback_query']['from']['id'] ?? '';
 
-if (isset($update['message'])) {
-    $chat_id = $update['message']['chat']['id'];
-    $text = $update['message']['text'];
-}
-    if ($text === '/start') {
-        sendTelegramMessage($token, [
-            'chat_id' => $chat_id,
-            'text' => "📆 اختر الشهر:",
-            'reply_markup' => json_encode([
-                'inline_keyboard' => generateMonthButtons()
-            ], JSON_UNESCAPED_UNICODE)
-        ]);
-    }
-if (isset($update['callback_query'])) {
-    $data = $update['callback_query']['data'];
-    $chat_id = $update['callback_query']['message']['chat']['id'];
-    $message_id = $update['callback_query']['message']['message_id'];
-}
-    if (strpos($data, 'month_') === 0) {
-        $month = str_replace('month_', '', $data);
-        $page = 1;
-
-        $keyboard = array_merge(
-            generateExtraButtons(),
-            generateDayButtons($month, $page)
-        );
-
-        editMessage($token, $chat_id, $message_id, "📅 اختر اليوم من $month:", $keyboard);
-
-    } elseif (strpos($data, 'daypage_') === 0) {
-        list(, $month, $page) = explode('_', $data);
-
-        $keyboard = array_merge(
-            generateExtraButtons(),
-            generateDayButtons($month, $page)
-        );
-
-        editMessage($token, $chat_id, $message_id, "📅 اختر اليوم من $month (صفحة $page):", $keyboard);
-
-    } elseif (strpos($data, 'day_') === 0) {
-        list(, $month, $day) = explode('_', $data);
-        answerCallback($token, $update['callback_query']['id'], "✅ تم اختيار يوم $day من $month");
-    }
-if (strpos($data, 'month_') === 0) {
-    $month = str_replace('month_', '', $data);
+if ($text == "/info") {
+	$keyboard = [];
+    $keyboard[] = [
+        ['text' => 'تعليق ', 'callback_data' => 'comm'],
+        ['text' => 'رد', 'callback_data' => 'rep']
+    ];
+    $keyboard[] = [
+        ['text' => 'تفاعل', 'callback_data' => 're']
+    ];
     $page = 1;
-
-    // حفظ الشهر للمستخدم
-    saveUserData($chat_id, ['month' => $month]);
-
-    $keyboard = array_merge(
-        generateExtraButtons(),
-        generateDayButtons($month, $page)
-    );
-
-    editMessage($token, $chat_id, $message_id, "📅 اختر اليوم من $month:", $keyboard);
-}
-if (strpos($data, 'day_') === 0) {
-    list(, $month, $day) = explode('_', $data);
-
-    // حفظ اليوم للمستخدم
-    saveUserData($chat_id, ['day' => $day]);
-
-    answerCallback($token, $update['callback_query']['id'], "✅ تم اختيار يوم $day من $month");
-}
-if ($text === '/start') {
-    $user = getUserData($chat_id);
-    $info = isset($user['month']) && isset($user['day']) 
-        ? "📝 آخر اختيار لك: {$user['day']} من {$user['month']}" 
-        : "👋 مرحبًا بك!";
-
-    sendTelegramMessage($token, [
+    $key = getMonthsPageKeyboard($page);
+    if(!$data){
+    $key1[] = [
+        ['text' => 'تغيير', 'callback_data' => 'ch']
+    ];}
+    $merge = array_merge($keyboard,$key,$key1);
+    bot('sendMessage', [
         'chat_id' => $chat_id,
-        'text' => "$info\n\n📆 اختر الشهر:",
-        'reply_markup' => json_encode([
-            'inline_keyboard' => generateMonthButtons()
-        ], JSON_UNESCAPED_UNICODE)
+        'text' => "Info list.♻",
+        'reply_markup' => json_encode(['inline_keyboard' => $merge])
     ]);
 }
+
+if ($text == '/start') {
+    bot('sendMessage', [
+        'chat_id' => $chat_id,
+        'text' => "اهلا بك.......👋",
+    ]);
+}
+function getMonthsPageKeyboard($page) {
+    $months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+    $monthsPerPage = 6;
+    $totalPages = ceil(count($months) / $monthsPerPage);
+
+    if ($page < 1) $page = 1;
+    if ($page > $totalPages) $page = $totalPages;
+
+    $startIndex = ($page - 1) * $monthsPerPage;
+    $monthsOnPage = array_slice($months, $startIndex, $monthsPerPage);
+
+    $keyboard = [];
+
+    // الصف الأول (3 أشهر)
+    $row1 = [];
+    for ($i = 0; $i < 3 && isset($monthsOnPage[$i]); $i++) {
+        $row1[] = [
+            'text' => $monthsOnPage[$i],
+            'callback_data' => 'month_' . strtolower($monthsOnPage[$i])
+        ];
+    }
+    if (!empty($row1)) $keyboard[] = $row1;
+
+    // الصف الثاني (3 أشهر التالية)
+    $row2 = [];
+    for ($i = 3; $i < 6 && isset($monthsOnPage[$i]); $i++) {
+        $row2[] = [
+            'text' => $monthsOnPage[$i],
+            'callback_data' => 'month_' . strtolower($monthsOnPage[$i])
+        ];
+    }
+    if (!empty($row2)) $keyboard[] = $row2;
+
+    // أزرار التنقل بين الصفحات
+    $navRow = [];
+
+    if ($page > 1) {
+        $navRow[] = ['text' => '⏮️ السابق', 'callback_data' => 'page_' . ($page - 1)];
+    }
+
+    if ($page < $totalPages) {
+        $navRow[] = ['text' => '⏭️ التالي', 'callback_data' => 'page_' . ($page + 1)];
+    }
+
+    if (!empty($navRow)) $keyboard[] = $navRow;
+
+    return $keyboard;
+}
+
+if (strpos($data, 'page_') === 0) {
+    $page = intval(str_replace('page_', '', $data));
+    $replyMarkup = getMonthsPageKeyboard($page);
+    bot('editMessageReplyMarkup', [
+        'chat_id' => $callback_chat_id,
+        'message_id' => $message_id,
+        'reply_markup' => json_encode(['inline_keyboard' => $replyMarkup])
+    ]);
+}
+?>
