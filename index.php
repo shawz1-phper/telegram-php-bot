@@ -7,7 +7,7 @@ $update = json_decode(file_get_contents('php://input'), true);
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
     $text = $update['message']['text'];
-
+}
     if ($text === '/start') {
         sendTelegramMessage($token, [
             'chat_id' => $chat_id,
@@ -17,12 +17,11 @@ if (isset($update['message'])) {
             ], JSON_UNESCAPED_UNICODE)
         ]);
     }
-
-} elseif (isset($update['callback_query'])) {
+if (isset($update['callback_query'])) {
     $data = $update['callback_query']['data'];
     $chat_id = $update['callback_query']['message']['chat']['id'];
     $message_id = $update['callback_query']['message']['message_id'];
-
+}
     if (strpos($data, 'month_') === 0) {
         $month = str_replace('month_', '', $data);
         $page = 1;
@@ -48,7 +47,6 @@ if (isset($update['message'])) {
         list(, $month, $day) = explode('_', $data);
         answerCallback($token, $update['callback_query']['id'], "✅ تم اختيار يوم $day من $month");
     }
-}
 if (strpos($data, 'month_') === 0) {
     $month = str_replace('month_', '', $data);
     $page = 1;
@@ -63,7 +61,7 @@ if (strpos($data, 'month_') === 0) {
 
     editMessage($token, $chat_id, $message_id, "📅 اختر اليوم من $month:", $keyboard);
 }
-}elseif (strpos($data, 'day_') === 0) {
+if (strpos($data, 'day_') === 0) {
     list(, $month, $day) = explode('_', $data);
 
     // حفظ اليوم للمستخدم
