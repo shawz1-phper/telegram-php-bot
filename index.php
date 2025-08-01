@@ -31,8 +31,9 @@ $user_id = $update['callback_query']['from']['id'] ?? '';
 
 if ($text == "فحص") {
     $page = 1;
-    $keyboard[] = getMonthsPageKeyboard($page);
-    $keyboard[] = ['text' => '⏮️', 'callback_data' => "cc"];
+    $key2 = getMonthsPageKeyboard($page);
+    $key1[] = ['text' => '⏮️', 'callback_data' => "cc"];
+    $keyboard = array_merge($key2,$key1);
     bot('sendMessage', [
         'chat_id' => $chat_id,
         'text' => "جاري فحص القنوات إنتظر قليلاً ..♻",
