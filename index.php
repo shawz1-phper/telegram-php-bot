@@ -52,7 +52,7 @@ if ($text == '/start') {
 	$dd = srtlen($d);
     bot('sendMessage', [
         'chat_id' => $chat_id,
-        'text' => "اهلا بك.......👋 $dd",
+        'text' => "اهلا بك.......👋 ".$dd,
     ]);
 }
 function getMonthsPageKeyboard($page) {
